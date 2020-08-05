@@ -1167,12 +1167,13 @@ function getDocument(src) {
     params.disableRange = false;
   }
 
+  //CUSTOM MODIFICATION
   if (typeof params.disableStream !== "boolean") {
-    params.disableStream = false;
+    params.disableStream = true;
   }
-
+  //CUSTOM MODIFICATION
   if (typeof params.disableAutoFetch !== "boolean") {
-    params.disableAutoFetch = false;
+    params.disableAutoFetch = true;
   }
 
   if (typeof params.disableCreateObjectURL !== "boolean") {
