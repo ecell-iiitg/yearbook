@@ -1,16 +1,34 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>Yearbook - Ecell, IIITG</title>
-    </head>
 
-    <body>
-        <canvas id="pdf-canvas"></canvas>
+<head>
+    <title>Yearbook - Ecell, IIITG</title>
 
-        <!-- Load PDF.js lib -->
-        <script src="pdfjs-dist/build/pdf.js"></script>
-        <!-- Load manual script  -->
-        <script src="res/pdf.js"></script>
-    </body>
+    <style>
+        #ebook {
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+        }
+        .pdf-canvas {
+            margin: 5px 0 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="ebook">
+
+    </div>
+
+    <!-- jQuery  -->
+    <script src="res/jquery.min.js"></script>
+    <!-- Load PDF.js lib -->
+    <script src="pdfjs-dist/build/pdf.js"></script>
+    <!-- Load manual script  -->
+    <script src="res/pdf.js"></script>
+</body>
+
 </html>

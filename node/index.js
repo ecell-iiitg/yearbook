@@ -7,7 +7,7 @@ app.use("/", (req, res, next) => {
     next();
 });
 
-app.use("/yearbook", express.static('res/Yearbook.pdf'))
+app.use("/yearbook", express.static('res/yearbook'))
 
 app.use("/", (req, res) => {
     res.send("Server running...");
