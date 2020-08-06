@@ -13,6 +13,7 @@
         }
         .pdf-canvas {
             margin: 5px 0 5px 0;
+            height: 1600px;
         }
     </style>
 </head>
@@ -20,7 +21,7 @@
 <body>
 
     <div id="ebook">
-
+        <canvas class="pdf-canvas"></canvas>
     </div>
 
     <!-- jQuery  -->
@@ -28,7 +29,19 @@
     <!-- Load PDF.js lib -->
     <script src="pdfjs-dist/build/pdf.js"></script>
     <!-- Load manual script  -->
-    <script src="res/pdf.js"></script>
+    <!-- <script src="res/pdf.js"></script> -->
+
+    <script src="res/infinite-scroll.min.js"></script>
+    <script>
+        let pages = 1;
+        var elem = document.querySelector('#ebook');
+            var infScroll = new InfiniteScroll(elem, {
+                // options
+                path: 'https://kushwahasameerkumar.github.io/ecell-yearbook/res/yearbook/ecell_yearbook_{{#}}.pdf',
+                append: '.pdf-canvas',
+                history: false,
+            });
+    </script>
 </body>
 
 </html>
