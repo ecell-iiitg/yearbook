@@ -1,4 +1,5 @@
-# Yearbook 2019-20 | ECELL | Indian Institute of Information Technology Guwahati
+# Yearbook 2019-20
+### Ecell - Indian Institute of Information Technology Guwahati
 
 > This repository contains codes of Ecell's Yearbook 2019-20 web page.
 
