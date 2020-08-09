@@ -83,11 +83,12 @@ let loading = false;
 let finished = false;
 
 
-$(document.body).on('touchmove', onScroll); // for mobile
+$(document).on('touchmove', onScroll); // for mobile
 // Endless scroll 
 $(window).scroll(onScroll);
 
 function onScroll() {
+    alert("triggered");
     if ($(window).scrollTop() == $(document).height() - $(window).height()) {
         // run our call for pagination
         //load next 2 pages
