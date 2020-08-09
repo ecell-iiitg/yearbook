@@ -1,5 +1,8 @@
 const loadPage = async pn => {
     return new Promise((resolve, reject) => {
+        if (pn > 115) {
+            resolve(pn);
+        }
         // If absolute URL from the remote server is provided, configure the CORS
         // header on that server.
         var url = 'https://kushwahasameerkumar.github.io/ecell-yearbook/res/yearbook/ecell_yearbook_' + pn + '.pdf';
@@ -39,13 +42,13 @@ const loadPage = async pn => {
                 var renderTask = page.render(renderContext);
                 renderTask.promise.then(function () {
                     console.log('Page rendered');
-                    resolve("Page rendered");
+                    resolve(pn);
                 });
             });
         }, function (reason) {
             // PDF loading error
                 console.error(reason);
-                reject(reason);
+                reject(pn);
         });
     });
 };
@@ -79,15 +82,22 @@ const hideLoadingOnPage = () => {
 let loading = false;
 let finished = false;
 
+
+$(document.body).on('touchmove', onScroll); // for mobile
 // Endless scroll 
-$(window).scroll(function () {
+$(window).scroll(onScroll);
+
+function onScroll() {
     if ($(window).scrollTop() == $(document).height() - $(window).height()) {
         // run our call for pagination
         //load next 2 pages
         if (!loading && pages <= 115) {
             loading = true;
             showLoadingOnPage();
-            appendPage(pages++);
+            appendPage(pages++).catch(pageNumber => {
+                //try to load one more time upon failure
+                loadPage(pageNumber);
+            });
             appendPage(pages++).then(() => {
                 hideLoadingOnPage();
                 loading = false;
@@ -95,10 +105,13 @@ $(window).scroll(function () {
                     finished = true;
                     document.getElementById("finished").style.display = "block";
                 }
+            }).catch(pageNumber => {
+                //try to load one more time upon failure
+                loadPage(pageNumber);
             });
         }
     }
-});
+}
 
 let pages = 5;
 // Initialize pages 
