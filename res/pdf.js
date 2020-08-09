@@ -61,30 +61,42 @@ const createPage = pageNumber => {
 
 const appendPage = async pageNumber => {
     createPage(pageNumber);
-    // showLoadingOnPage(pageNumber);
+    showLoadingOnPage(pageNumber);
     await loadPage(pageNumber);
     return "Append completed";
 };
 
-const showLoadingOnPage = page => {
-    const pageCanvas = document.getElementById("ebook");
-    const loading = `<div id="loading-${page}" style="justify-content: center; align-content: center"> LOADING PAGE ${page}... </div>`;
-    pageCanvas.innerHTML += loading;
+const showLoadingOnPage = () => {
+    const pageCanvas = document.getElementById("loading");
+    pageCanvas.style.display = 'block';
 };
 
-const hideLoadingOnPage = page => {
-    const loading = document.getElementById("loading-" + page);
-    if (loading) {
-        loading.parentNode.removeChild(loading);
-    }
+const hideLoadingOnPage = () => {
+    const loading = document.getElementById("loading");
+    loading.style.display = 'none';
 }
+
+let loading = false;
+let finished = false;
 
 // Endless scroll 
 $(window).scroll(function () {
     if ($(window).scrollTop() == $(document).height() - $(window).height()) {
         // run our call for pagination
-        const currentPage = pages++;
-        appendPage(currentPage);
+        //load next 2 pages
+        if (!loading && pages <= 115) {
+            loading = true;
+            showLoadingOnPage();
+            appendPage(pages++);
+            appendPage(pages++).then(() => {
+                hideLoadingOnPage();
+                loading = false;
+                if (pages >= 115) {
+                    finished = true;
+                    document.getElementById("finished").style.display = "block";
+                }
+            });
+        }
     }
 });
 
