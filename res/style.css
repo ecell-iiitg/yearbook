@@ -8,7 +8,7 @@ body {
 }
 
 #bg {
-    background: url(https://directlinedev.com/media/services/service/background/background_11.wide.jpeg);
+    background: url(img/background.jpeg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
