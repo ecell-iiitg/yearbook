@@ -88,7 +88,7 @@ let finished = false;
 $(window).scroll(onScroll);
 
 function onScroll() {
-    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+    if ($(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
         // run our call for pagination
         //load next 2 pages
         if (!loading && pages <= 115) {
