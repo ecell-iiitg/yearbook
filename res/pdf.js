@@ -90,7 +90,7 @@ $(window).scroll(onScroll);
 function onScroll() {
     //debug
     // document.getElementById("download").innerHTML = `Scroll top: ${$(window).scrollTop()}, document height: ${$(document).height()}, window-height: ${$(window).height()}`;
-    if ($(window).scrollTop() >= $(document).height() - $(window).height() - 200) {
+    if ($(window).scrollTop() >= $(document).height() - (2 * $(window).height())) {
         // run our call for pagination
         //load next 2 pages
         if (!loading && pages <= 115) {
