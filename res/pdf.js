@@ -88,7 +88,8 @@ let finished = false;
 $(window).scroll(onScroll);
 
 function onScroll() {
-    document.getElementById("download").innerHTML = `Scroll top: ${$(window).scrollTop()}, document height: ${$(document).height()}, window-height: ${$(window).height()}`;
+    //debug
+    // document.getElementById("download").innerHTML = `Scroll top: ${$(window).scrollTop()}, document height: ${$(document).height()}, window-height: ${$(window).height()}`;
     if ($(window).scrollTop() >= $(document).height() - $(window).height() - 200) {
         // run our call for pagination
         //load next 2 pages
