@@ -1,3 +1,7 @@
+let pageview;
+
+const unloadedPages = {};
+
 const loadPage = async pn => {
     return new Promise((resolve, reject) => {
         if (pn > 115) {
@@ -17,15 +21,18 @@ const loadPage = async pn => {
         // Asynchronous download of PDF
         var loadingTask = pdfjsLib.getDocument(url);
         loadingTask.promise.then(function (pdf) {
-            console.log('PDF loaded');
+            // console.log('PDF loaded');
 
             // Fetch the first page
             var pageNumber = 1;
             pdf.getPage(pageNumber).then(function (page) {
-                console.log('Page loaded');
+                // console.log('Page loaded');
 
                 var scale = 1.5;
                 var viewport = page.getViewport({ scale: scale });
+
+                //for navigation
+                pageview = viewport;
 
                 // Prepare canvas using PDF page dimensions
                 const canvasId = "pdf-canvas-" + pn;
@@ -41,7 +48,10 @@ const loadPage = async pn => {
                 };
                 var renderTask = page.render(renderContext);
                 renderTask.promise.then(function () {
-                    console.log('Page rendered');
+                    // console.log('Page rendered');
+                    if (unloadedPages[pn]) {
+                        delete unloadedPages[pn];
+                    }
                     resolve(pn);
                 });
             });
@@ -57,8 +67,33 @@ const createPage = pageNumber => {
     const canvas = document.createElement("canvas");
     canvas.id = "pdf-canvas-" + pageNumber;
     canvas.class = "pdf-canvas";
+    // canvas.setAttribute("data-page", pageNumber);
+
+    if (pageview) {
+        canvas.height = pageview.height;
+        canvas.width = pageview.width;
+
+        var image = new Image();
+        image.src = 'res/img/loading.png';
+        image.onload = function () {
+            var canvasContext = canvas.getContext('2d');
+            var wrh = image.width / image.height;
+            var newWidth = canvas.width;
+            var newHeight = newWidth / wrh;
+            if (newHeight > canvas.height) {
+                newHeight = canvas.height;
+                newWidth = newHeight * wrh;
+            }
+            var xOffset = newWidth < canvas.width ? ((canvas.width - newWidth) / 2) : 0;
+            var yOffset = newHeight < canvas.height ? ((canvas.height - newHeight) / 2) : 0;
+
+            canvasContext.drawImage(image, xOffset, yOffset, newWidth, newHeight);
+        };
+    }
 
     document.getElementById("ebook").appendChild(canvas);
+    unloadedPages[pageNumber] = 1;
+    // $("#pdf-canvas-" + pageNumber).focus(focusHandler);
 };
 
 
@@ -82,12 +117,56 @@ const hideLoadingOnPage = () => {
 let loading = false;
 let finished = false;
 
+//navigation start
+const goto = (page) => {
+    const element = document.getElementById("pdf-canvas-" + page);
+    element.scrollIntoView();
+}
+
+const navigateToPage = (pageNumber) => {
+    if (pageNumber < pages) {
+        goto(pageNumber);
+    }
+    else {
+        for (; pages <= pageNumber; ++pages) {
+            createPage(pages);
+        }
+        goto(pageNumber);
+    }
+};
+
+const isInViewport = function (elem) {
+    var bounding = elem.getBoundingClientRect();
+    return (
+        bounding.top >= 0 &&
+        bounding.left >= 0 &&
+        bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+};
+
+//navigation end
+
 
 // $(document).on('touchmove', onScroll); // for mobile
 // Endless scroll 
 $(window).scroll(onScroll);
 
 function onScroll() {
+    //load unloaded pages
+    if (Object.keys(unloadedPages).length > 0) {
+        for (pn in unloadedPages) {
+            if (unloadedPages[pn] == 1) {
+                const element = document.getElementById("pdf-canvas-" + pn);
+                if ($("#pdf-canvas-" + pn).visible(true)) {
+                    // console.log(pn);
+                    loadPage(pn);
+                    unloadedPages[pn] = 0;
+                }
+            }
+        }
+    }
+
     //debug
     // document.getElementById("download").innerHTML = `Scroll top: ${$(window).scrollTop()}, document height: ${$(document).height()}, window-height: ${$(window).height()}`;
     if ($(window).scrollTop() >= $(document).height() - (2 * $(window).height())) {
