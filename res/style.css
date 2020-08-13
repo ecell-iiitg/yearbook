@@ -189,9 +189,12 @@ body {
         max-width: none;
         width: 100%;
         height: 100%;
-        opacity: 90%;
+        opacity: 95%;
         top: 0;
         left: 0;
+    }
+    #nav-panel ol{
+        font-size: initial;
     }
     .nav-item {
         margin: 20px 20px 20px 25px;
