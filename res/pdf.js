@@ -3,6 +3,10 @@ let pageview;
 const unloadedPages = {};
 
 const loadPage = async pn => {
+    // console.log("Loading: ", pn);
+    if (unloadedPages[pn]) {
+        unloadedPages[pn] = 0;
+    }
     return new Promise((resolve, reject) => {
         if (pn > 115) {
             resolve(pn);
@@ -154,18 +158,35 @@ $(window).scroll(onScroll);
 
 function onScroll() {
     //load unloaded pages
-    if (Object.keys(unloadedPages).length > 0) {
-        for (pn in unloadedPages) {
-            if (unloadedPages[pn] == 1) {
-                const element = document.getElementById("pdf-canvas-" + pn);
-                if ($("#pdf-canvas-" + pn).visible(true)) {
-                    // console.log(pn);
-                    loadPage(pn);
-                    unloadedPages[pn] = 0;
-                }
+    for (var pn = 1; pn < pages; ++pn){
+        if ($("#pdf-canvas-" + pn).visible(true)) {
+            // console.log("Focus", pn);
+            if (unloadedPages[pn]) {
+                loadPage(pn);
+            }
+            //load backward
+            if (unloadedPages[pn - 1]) {
+                loadPage(pn - 1);
+            }
+            //load forward
+            if (unloadedPages[pn + 1]) {
+                loadPage(pn + 1);
             }
         }
     }
+    // if (Object.keys(unloadedPages).length > 0) {
+    //     for (pn in unloadedPages) {
+    //         if (unloadedPages[pn] == 1) {
+    //             const element = document.getElementById("pdf-canvas-" + pn);
+    //             if ($("#pdf-canvas-" + pn).visible(true)) {
+    //                 console.log("Focus", pn);
+    //                 loadPage(pn);
+    //                 loadPage(pn - 1);
+    //                 unloadedPages[pn] = 0;
+    //             }
+    //         }
+    //     }
+    // }
 
     //debug
     // document.getElementById("download").innerHTML = `Scroll top: ${$(window).scrollTop()}, document height: ${$(document).height()}, window-height: ${$(window).height()}`;
