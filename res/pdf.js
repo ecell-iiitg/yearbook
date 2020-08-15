@@ -2,6 +2,15 @@ let pageview;
 
 const unloadedPages = {};
 
+function recordPageView(pn) {
+    gtag('event', 'pageview', {
+        'event_category': 'pageview',
+        'event_label': 'Page ' + pn,
+        'value': 'Page ' + pn + ' viewed',
+        'non_interaction': true
+    });
+}
+
 const loadPage = async pn => {
     // console.log("Loading: ", pn);
     if (unloadedPages[pn]) {
@@ -56,6 +65,7 @@ const loadPage = async pn => {
                     if (unloadedPages[pn]) {
                         delete unloadedPages[pn];
                     }
+                    recordPageView(pn);
                     resolve(pn);
                 });
             });
@@ -128,6 +138,11 @@ const goto = (page) => {
 }
 
 const navigateToPage = (pageNumber) => {
+    gtag('event', 'click', {
+        'event_category': 'navigation',
+        'event_label': 'Page ' + pageNumber,
+        'value': 'Navigation to page ' + pageNumber
+    });
     if (pageNumber < pages) {
         goto(pageNumber);
     }

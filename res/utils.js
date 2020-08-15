@@ -5,6 +5,11 @@ window.onload = function () {
     const navSubItems = document.getElementsByClassName("nav-sub-item");
 
     const toggleNavPanel = () => {
+        gtag('event', 'click', {
+            'event_category': 'navigation',
+            'event_label': 'nav button',
+            'value': 'Navigation button clicked'
+        });
         const status = navPanel.style.display;
         if (status == "none") {
             navPanel.style.display = "block";
@@ -33,4 +38,12 @@ window.onload = function () {
             navPanel.style.display = "none";
         }
     })
+}
+
+function recordDownload() {
+    gtag('event', 'download', {
+        'event_category': 'download',
+        'event_label': 'download',
+        'value': 'Yearbook pdf downloaded'
+    });
 }
