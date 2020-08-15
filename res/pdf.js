@@ -7,7 +7,7 @@ function recordPageView(pn) {
         'event_category': 'pageview',
         'event_label': 'Page ' + pn,
         'value': 'Page ' + pn + ' viewed',
-        'non_interaction': true
+        // 'non_interaction': true
     });
 }
 
