@@ -1,4 +1,5 @@
 let pageview;
+let pages = 1;
 
 const unloadedPages = {};
 
@@ -166,6 +167,36 @@ const isInViewport = function (elem) {
 
 //navigation end
 
+//navigate to page on load, if page in URL
+let urlNavFocused = false;
+let pageURL = false;
+let urlPage;
+const queryString = window.location.search;
+if (queryString) {
+    const params = new URLSearchParams(queryString);
+    const pageNo = params.get("page");
+    if (pageNo) {
+        urlPage = pageNo;
+        pageURL = true;
+        pages = 1;
+        console.log(pageNo);
+        navigateToPage(pageNo);
+        // setTimeout(function () {
+        //     // urlNavFocused = true;
+        // }, 3000);
+        setTimeout(function () {
+            navigateToPage(pageNo);
+        }, 2000);
+        // setTimeout(function () {
+        //     navigateToPage(pageNo);
+        // }, 4000);
+        gtag('event', 'topic', {
+            'event_category': 'topic',
+            'event_label': 'Page ' + pageNo,
+            'value': 'Navigation from URL'
+        });
+    }
+}
 
 // $(document).on('touchmove', onScroll); // for mobile
 // Endless scroll 
@@ -173,19 +204,26 @@ $(window).scroll(onScroll);
 
 function onScroll() {
     //load unloaded pages
-    for (var pn = 1; pn < pages; ++pn){
-        if ($("#pdf-canvas-" + pn).visible(true)) {
-            // console.log("Focus", pn);
-            if (unloadedPages[pn]) {
-                loadPage(pn);
-            }
-            //load backward
-            if (unloadedPages[pn - 1]) {
-                loadPage(pn - 1);
-            }
-            //load forward
-            if (unloadedPages[pn + 1]) {
-                loadPage(pn + 1);
+    if (pageURL && !urlNavFocused) {
+        navigateToPage(urlPage);
+        urlNavFocused = true;
+    }
+
+    if (urlNavFocused || !pageURL) {
+        for (var pn = 1; pn < pages; ++pn) {
+            if ($("#pdf-canvas-" + pn).visible(true)) {
+                // console.log("Focus", pn);
+                if (unloadedPages[pn]) {
+                    loadPage(pn);
+                }
+                //load backward
+                if (unloadedPages[pn - 1]) {
+                    loadPage(pn - 1);
+                }
+                //load forward
+                if (unloadedPages[pn + 1]) {
+                    loadPage(pn + 1);
+                }
             }
         }
     }
@@ -230,9 +268,12 @@ function onScroll() {
     }
 }
 
-let pages = 5;
 // Initialize pages 
-appendPage(1);
-appendPage(2);
-appendPage(3);
-appendPage(4);
+if (!pageURL) {
+    appendPage(1);
+    appendPage(2);
+    appendPage(3);
+    appendPage(4);
+
+    pages = 5;
+}

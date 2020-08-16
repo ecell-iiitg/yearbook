@@ -39,28 +39,6 @@ window.onload = function () {
         }
     });
 
-    //navigate to page on load
-    const queryString = window.location.search;
-    if (queryString) {
-        const params = new URLSearchParams(queryString);
-        const pageNo = params.get("page");
-        if (pageNo) {
-            console.log(pageNo);
-            navigateToPage(pageNo);
-            setTimeout(function () {
-                navigateToPage(pageNo);
-            }, 2000);
-            setTimeout(function () {
-                navigateToPage(pageNo);
-            }, 4000);
-            gtag('event', 'topic', {
-                'event_category': 'topic',
-                'event_label': 'Page ' + pageNo,
-                'value': 'Navigation from URL'
-            });
-        }
-    }
-
 }
 
 function recordDownload() {
