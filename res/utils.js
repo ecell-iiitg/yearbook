@@ -45,7 +45,14 @@ window.onload = function () {
         const params = new URLSearchParams(queryString);
         const pageNo = params.get("page");
         if (pageNo) {
+            console.log(pageNo);
             navigateToPage(pageNo);
+            setTimeout(function () {
+                navigateToPage(pageNo);
+            }, 2000);
+            setTimeout(function () {
+                navigateToPage(pageNo);
+            }, 4000);
             gtag('event', 'topic', {
                 'event_category': 'topic',
                 'event_label': 'Page ' + pageNo,
