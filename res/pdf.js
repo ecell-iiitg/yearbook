@@ -186,10 +186,10 @@ if (queryString) {
         // }, 3000);
         setTimeout(function () {
             navigateToPage(pageNo);
-        }, 2000);
-        // setTimeout(function () {
-        //     navigateToPage(pageNo);
-        // }, 4000);
+        }, 3000);
+        setTimeout(function () {
+            navigateToPage(pageNo);
+        }, 10000);
         gtag('event', 'topic', {
             'event_category': 'topic',
             'event_label': 'Page ' + pageNo,
