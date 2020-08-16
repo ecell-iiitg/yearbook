@@ -46,6 +46,11 @@ window.onload = function () {
         const pageNo = params.get("page");
         if (pageNo) {
             navigateToPage(pageNo);
+            gtag('event', 'topic', {
+                'event_category': 'topic',
+                'event_label': 'Page ' + pageNo,
+                'value': 'Navigation from URL'
+            });
         }
     }
 
