@@ -37,7 +37,18 @@ window.onload = function () {
         if (!(e.target.id == "nav-button" || e.target.id == "nav-panel" || e.target.id == "nav-image" || e.target.tagName == "OL" || e.target.tagName == "UL")) {
             navPanel.style.display = "none";
         }
-    })
+    });
+
+    //navigate to page on load
+    const queryString = window.location.search;
+    if (queryString) {
+        const params = new URLSearchParams(queryString);
+        const pageNo = params.get("page");
+        if (pageNo) {
+            navigateToPage(pageNo);
+        }
+    }
+
 }
 
 function recordDownload() {
